@@ -20,7 +20,7 @@ class block_compile_discussions extends block_base {
         $this->content = new stdClass;
 
         $course = $this->page->course;
-        $modinfo =& get_fast_modinfo($course);
+        $modinfo = get_fast_modinfo($course);
         $forums = $DB->get_records('forum', array('course' => $course->id));
         $menu = array();
 
@@ -39,20 +39,24 @@ class block_compile_discussions extends block_base {
                 continue;
             }
 
-            // Add to array for the menu
-			$menu[$forum->id] = $forum->name;
+            // Add to array for the menu. Truncate the name if long.
+            $fname = $forum->name;
+            if (strlen($fname) > 20) {
+                $fname = substr($fname, 0, 20) . '...';
+            }
+            $menu[$forum->id] = $fname;
         }
 
         // Now we have an array of all forums. Use this to populate a drop-down menu. Selecting an option
-		// will call the compile.php script and pass the forum ID as argument.
-		$actionurl = new moodle_url('/blocks/compile_discussions/compile.php');
+        // will call the compile.php script and pass the forum ID as argument.
+	$actionurl = new moodle_url('/blocks/compile_discussions/compile.php');
         $select = new single_select($actionurl, 'forumid', $menu, null,
-		    array(''=>get_string('chooseforum', 'block_compile_discussions')));
+	    array(''=>get_string('chooseforum', 'block_compile_discussions')));
         $this->content = new stdClass;
-		$this->content->text = $OUTPUT->render($select);
+	$this->content->text = $OUTPUT->render($select);
 
 
-		return $this->content;
+	return $this->content;
     }
 }
 

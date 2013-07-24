@@ -45,7 +45,9 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
 
 
 
-    // Output header information
+    // Output header information. This is all rather crude - it would be better
+    // to try to do this as a proper Moodle page with styles applied.
+    header('Content-Type: text/html; charset=utf-8');
     $url = qualified_me();
     if (($strpos = strpos($url, '?')) !== false) {
         $querystring = substr($url, $strpos);

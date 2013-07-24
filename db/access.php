@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unitu block capabilities.
+ * Compile discussions block capabilities.
  *
  * @package    block
  * @subpackage compile_discussions
