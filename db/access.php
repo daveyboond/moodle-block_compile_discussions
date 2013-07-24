@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,15 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_compile_discussions', language 'en', branch 'MOODLE_20_STABLE'
+ * Unitu block capabilities.
  *
- * @package   block_compile_discussions
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block
+ * @subpackage compile_discussions
+ * @copyright  2013 Steve Bond
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['back'] = 'Back to {$a}';
-$string['chooseforum'] = 'Forum to compile...';
-$string['no_forum'] = 'There is no forum with id {$a}';
-$string['no_permission'] = 'You don\'t have permission to view this forum';
-$string['pluginname'] = 'Compile discussions';
+// Capabilities similar to block_html, without myaddinstance
+
+defined('MOODLE_INTERNAL') || die();
+
+$capabilities = array(
+
+    'block/compile_discussions:addinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+);
