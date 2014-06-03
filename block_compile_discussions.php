@@ -11,7 +11,7 @@ class block_compile_discussions extends block_base {
 
     function get_content() {
         global $CFG, $USER, $DB, $OUTPUT;
-		require_once($CFG->dirroot . '/mod/forum/lib.php');
+	require_once($CFG->dirroot . '/mod/forum/lib.php');
 
         // Set up the content object
         if ($this->content !== NULL) {
@@ -31,7 +31,7 @@ class block_compile_discussions extends block_base {
 
             $forum = $forums[$forumid];
 
-            if (!$context = get_context_instance(CONTEXT_MODULE, $cm->id)) {
+            if (!$context = context_module::instance($cm->id)) {
                 continue;   // Shouldn't happen
             }
 
@@ -49,12 +49,12 @@ class block_compile_discussions extends block_base {
 
         // Now we have an array of all forums. Use this to populate a drop-down menu. Selecting an option
         // will call the compile.php script and pass the forum ID as argument.
-	$actionurl = new moodle_url('/blocks/compile_discussions/compile.php');
+        $actionurl = new moodle_url('/blocks/compile_discussions/compile.php');
         $select = new single_select($actionurl, 'forumid', $menu, null,
 	    array(''=>get_string('chooseforum', 'block_compile_discussions')));
         $this->content = new stdClass;
-	$this->content->text = $OUTPUT->render($select);
-
+	$this->content->text = html_writer::tag('p', get_string('select', 'block_compile_discussions'));
+	$this->content->text .= $OUTPUT->render($select);
 
 	return $this->content;
     }

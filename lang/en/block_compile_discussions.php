@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_compile_discussions', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for component 'block_compile_discussions', language 'en'
  *
- * @package   block_compile_discussions
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block
+ * @subpackage compile_discussions
+ * @copyright  2014 Steve Bond
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['back'] = 'Back to {$a}';
@@ -28,3 +29,4 @@ $string['chooseforum'] = 'Forum to compile...';
 $string['no_forum'] = 'There is no forum with id {$a}';
 $string['no_permission'] = 'You don\'t have permission to view this forum';
 $string['pluginname'] = 'Compile discussions';
+$string['select'] = 'Select the forum you want to compile posts from:';

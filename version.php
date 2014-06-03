@@ -18,13 +18,13 @@
  * Version details
  *
  * @package    block
- * @subpackage news_extended
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @subpackage compile_discussions
+ * @copyright  2014 Steve Bond
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2013072400;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2011112900;        // Requires this Moodle version
+$plugin->version   = 2014060300;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2013111802;        // Requires this Moodle version
 $plugin->component = 'block_compile_discussions'; // Full name of the plugin (used for diagnostics)

@@ -3,7 +3,7 @@
 require_once('../../config.php');
 require_once('../../mod/forum/lib.php');
 
-global $CFG, $DB, $PAGE;
+global $DB, $PAGE, $OUTPUT;
 
 $forumid = required_param('forumid', PARAM_INT);
 
@@ -14,9 +14,9 @@ if (!$forum = $DB->get_record('forum', array('id' => $forumid))) {
 require_login($forum->course);
 
 $course = $DB->get_record('course', array('id' => $forum->course));
-$course_context = get_context_instance(CONTEXT_COURSE, $course->id);
+$course_context = context_course::instance($course->id);
 $cm = get_coursemodule_from_instance('forum', $forum->id);
-$context = get_context_instance(CONTEXT_MODULE, $cm->id);
+$context = context_module::instance($cm->id);
 
 if (!has_capability('mod/forum:viewdiscussion', $context)) {
     print_error('no_permission', 'block_quickmail');
@@ -25,7 +25,7 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
     // *** Stolen from /forum/view.php ***
 
 
-/// Some capability checks.
+    // Some capability checks
     if (empty($cm->visible) and !has_capability('moodle/course:viewhiddenactivities', $context)) {
         notice(get_string("activityiscurrentlyhidden"));
     }
@@ -34,29 +34,19 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
         notice(get_string('noviewdiscussionspermission', 'forum'));
     }
 
-/// find out current groups mode
-    $currentgroup = groups_get_activity_group($cm);
-    $groupmode = groups_get_activity_groupmode($cm);
-
-
     $forum->intro = trim($forum->intro);
 
     // *** End of stuff stolen from /forum/view.php ***
 
 
-
-    // Output header information. This is all rather crude - it would be better
-    // to try to do this as a proper Moodle page with styles applied.
-    header('Content-Type: text/html; charset=utf-8');
-    $url = qualified_me();
-    if (($strpos = strpos($url, '?')) !== false) {
-        $querystring = substr($url, $strpos);
-    }
-    echo "<span style=\"float: right\"><a href=\"" . $course_context->get_url() . "\">"
-        . get_string('back', 'block_compile_discussions', $course->shortname) . "</a></span>";
-    echo "<h1>Course: " . $course->fullname . "</h1>\n";
-    echo "<h2>Forum: " . $forum->name . "</h2>\n";
-    echo "<p>" . $forum->intro . "</p>\n";
+    // Set up page and output header information.
+    $PAGE->set_url('/blocks/compile_discussions/compile.php', array('forumid' => $forum->id));
+    
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading("Forum: " . $forum->name);
+    echo $OUTPUT->box_start('mod_introbox');
+    echo $forum->intro;
+    echo $OUTPUT->box_end();
 
     // Get discussions in reverse chronological order
     $discussions = $DB->get_records("forum_discussions", array('forum' => $forumid), "timemodified DESC");
@@ -92,6 +82,8 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
         }
     }
 
+    echo $OUTPUT->footer();
+    
     exit;
 
     function get_children (&$posts, &$postsordered, $id, &$indent) {
