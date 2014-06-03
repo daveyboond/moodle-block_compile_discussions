@@ -24,9 +24,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['anonuser'] = "Anonymous user";
 $string['back'] = 'Back to {$a}';
-$string['chooseforum'] = 'Forum to compile...';
-$string['no_forum'] = 'There is no forum with id {$a}';
-$string['no_permission'] = 'You don\'t have permission to view this forum';
+$string['chooseforum'] = 'Forums...';
+$string['choosehsuforum'] = 'Advanced Forums...';
 $string['pluginname'] = 'Compile discussions';
-$string['select'] = 'Select the forum you want to compile posts from:';
+$string['select'] = 'Select the forum you want to compile the posts from:';
+
+$string['error:invalidtype'] = 'An invalid forum type {$a} was passed.';
+$string['error:noforum'] = 'There is no {$b} with id {$a}';
+$string['error:nopermission'] = 'You don\'t have permission to view this forum';

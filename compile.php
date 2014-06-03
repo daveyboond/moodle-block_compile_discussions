@@ -6,20 +6,28 @@ require_once('../../mod/forum/lib.php');
 global $DB, $PAGE, $OUTPUT;
 
 $forumid = required_param('forumid', PARAM_INT);
+$type = required_param('type', PARAM_ALPHA);
 
-if (!$forum = $DB->get_record('forum', array('id' => $forumid))) {
-    print_error('no_forum', 'block_compile_discussions', '', $forumid);
+// The parameter type must match the table name of a forum type
+if ($type != 'forum' && $type != 'hsuforum') {
+    print_error('error:invalidtype', 'block_compile_discussions', '', $type);
 }
 
+// Check if there is a forum with that ID
+if (!$forum = $DB->get_record($type, array('id' => $forumid))) {
+    print_error('error:noforum', 'block_compile_discussions', '', $forumid, $type);
+}
+
+// From here on, $forum may be a record for either a normal forum or an hsuforum
 require_login($forum->course);
 
 $course = $DB->get_record('course', array('id' => $forum->course));
 $course_context = context_course::instance($course->id);
-$cm = get_coursemodule_from_instance('forum', $forum->id);
+$cm = get_coursemodule_from_instance($type, $forum->id);
 $context = context_module::instance($cm->id);
 
 if (!has_capability('mod/forum:viewdiscussion', $context)) {
-    print_error('no_permission', 'block_quickmail');
+    print_error('error:nopermission', 'block_compile_discussions');
 }
 
     // *** Stolen from /forum/view.php ***
@@ -49,7 +57,7 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
     echo $OUTPUT->box_end();
 
     // Get discussions in reverse chronological order
-    $discussions = $DB->get_records("forum_discussions", array('forum' => $forumid), "timemodified DESC");
+    $discussions = $DB->get_records($type."_discussions", array('forum' => $forumid), "timemodified DESC");
 
     // Loop through discussions
     foreach ($discussions as $discussion) {
@@ -58,7 +66,7 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
         echo "<h3>Discussion: " . $discussion->name . "</h3>\n";
 
         // Get posts for this discussion in order of creation time
-        $posts = $DB->get_records("forum_posts", array("discussion" => $discussion->id), "created");
+        $posts = $DB->get_records($type."_posts", array("discussion" => $discussion->id), "created");
 
         // Loop through posts and recurse down threads, gathering child posts
         $postsordered = array();
@@ -69,12 +77,19 @@ if (!has_capability('mod/forum:viewdiscussion', $context)) {
             get_children($posts, $postsordered, $post->id, $indent);
         }
 
-        // Output post information
+        // Output post information.
+        // If an 'anonymous' field exists for this forum and is set, and the
+        // post has a 'reveal' field that is not set, anonymise the author
         foreach ($postsordered as $post) {
             for ($i = 0; $i < $post->indent; $i++) echo "<blockquote>\n"; // Indent child posts
             echo "<p><strong>" . $post->subject . "</strong><br />\n";
             $user =  $DB->get_record("user", array("id" => $post->userid)); // Get user details
-            echo "<em>" . $user->firstname . " " . $user->lastname . ", "
+            if (isset($forum->anonymous) && $forum->anonymous == 1 && $post->reveal == 0) {
+                $fullname = get_string('anonuser', 'block_compile_discussions');
+            } else {
+                $fullname = $user->firstname . " " . $user->lastname;
+            }
+            echo "<em>" . $fullname . ", "
                 . strftime("%a %d %b %Y %H:%M", $post->modified) . "</em></p>\n";
             echo "<p>" . $post->message . "</p>\n";
 			echo forum_print_attachments($post, $cm, "html");
