@@ -28,6 +28,7 @@ $string['anonuser'] = "Anonymous user";
 $string['back'] = 'Back to {$a}';
 $string['chooseforum'] = 'Forums...';
 $string['choosehsuforum'] = 'Advanced Forums...';
+$string['compile_discussions:addinstance'] = 'Add Compile discussions block';
 $string['pluginname'] = 'Compile discussions';
 $string['select'] = 'Select the forum you want to compile the posts from:';
 
