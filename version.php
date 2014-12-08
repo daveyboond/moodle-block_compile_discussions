@@ -28,3 +28,4 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version   = 2014060301;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2013111802;        // Requires this Moodle version.
 $plugin->component = 'block_compile_discussions'; // Full name of the plugin (used for diagnostics).
+$plugin->release = 'Version 2.0 for Moodle 2.6';
