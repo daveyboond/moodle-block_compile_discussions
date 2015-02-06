@@ -35,10 +35,8 @@ if ($type != 'forum' && $type != 'hsuforum') {
     print_error('error:invalidtype', 'block_compile_discussions', '', $type);
 }
 
-// Check if there is a forum with that ID.
-if (!$forum = $DB->get_record($type, array('id' => $forumid))) {
-    print_error('error:noforum', 'block_compile_discussions', '', $forumid, $type);
-}
+// Get the forum with that ID.
+$forum = $DB->get_record($type, array('id' => $forumid), '*', MUST_EXIST);
 
 // From here on, $forum may be a record for either a normal forum or an hsuforum.
 require_login($forum->course);

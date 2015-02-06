@@ -32,5 +32,4 @@ $string['pluginname'] = 'Compile discussions';
 $string['select'] = 'Select the forum you want to compile the posts from:';
 
 $string['error:invalidtype'] = 'An invalid forum type {$a} was passed.';
-$string['error:noforum'] = 'There is no {$b} with id {$a}';
 $string['error:nopermission'] = 'You don\'t have permission to view this forum';
